@@ -142,10 +142,14 @@ class SistemaAcademico:
 sistema = SistemaAcademico()
 
 while True:
-    print("\n--- Menu Principal ---")
+    print("\n---- SISTEMA UFSC ----")
+    print("--- Menu Principal ---")
     print("1. Criar disciplina")
     print("2. Listar disciplinas")
-    print("3. Sair")
+    print("3. Gerenciar disciplina")
+    print("4. Excluir disciplina")
+    print("5. Alterar nome da disciplina")
+    print("6. Sair")
     
     try:
         opcao = int(input("Escolha uma opção: "))
@@ -160,9 +164,85 @@ while True:
             sistema.listar_disciplinas()
         
         elif opcao == 3:
+            nome_disciplina = input("Digite o nome da disciplina: ")
+            disciplina = sistema.buscar_disciplina(nome_disciplina)
+            if disciplina:
+                while True:
+                    print(f"\n--- Gerenciamento da Disciplina {disciplina.nome} ---")
+                    print("1. Adicionar aluno")
+                    print("2. Listar alunos")
+                    print("3. Registrar faltas")
+                    print("4. Ver faltas de aluno")
+                    print("5. Ver porcentagem máxima de presença")
+                    print("6. Ver aulas restantes")
+                    print("7. Remover aluno")
+                    print("8. Voltar")
+                    
+                    sub_opcao = int(input("Escolha uma opção: "))
+                    
+                    if sub_opcao == 1:
+                        nome_aluno = input("Nome do aluno: ")
+                        cpf_aluno = input("Cpf do aluno: ")
+                        matricula = input("Matrícula: ")
+                        aluno = Aluno(nome_aluno, cpf_aluno, matricula) 
+                        disciplina.adicionar_aluno(aluno) #agregação de Aluno
+                    
+                    elif sub_opcao == 2:
+                        print("Alunos matriculados:", disciplina.listar_alunos())
+                    
+                    elif sub_opcao == 3:
+                        matricula = input("Matrícula do aluno: ")
+                        quantidade = int(input("Quantidade de faltas: "))
+                        for aluno in disciplina.alunos:
+                            if aluno.matricula == matricula:
+                                aluno.registrar_faltas(disciplina.nome, quantidade)
+                                break
+                        else:
+                            print("Aluno não encontrado.")
+                    
+                    elif sub_opcao == 4:
+                        matricula = input("Matrícula do aluno: ")
+                        faltas = disciplina.faltas_aluno(matricula)
+                        if faltas is not None:
+                            print(f"Faltas do aluno: {faltas}")
+                    
+                    elif sub_opcao == 5:
+                        matricula = input("Matrícula do aluno: ")
+                        porcentagem = sistema.porcentagem_presenca(disciplina, matricula)
+                        if porcentagem is not None:
+                            print(f"Porcentagem máxima de presença: {porcentagem:.2f}%")
+                    
+                    elif sub_opcao == 6:
+                        matricula = input("Matrícula do aluno: ")
+                        restantes = sistema.aulas_restantes(disciplina, matricula)
+                        if restantes is not None:
+                            print(f"Aulas que o aluno ainda pode faltar: {restantes:.2f}")
+                    
+                    elif sub_opcao == 7:
+                        matricula = input("Matrícula do aluno a ser removido: ")
+                        disciplina.remover_aluno(matricula)
+                    
+                    elif sub_opcao == 8:
+                        break
+                    else:
+                        print("Opção inválida.")
+            else:
+                print("Disciplina não encontrada.")
+        
+        elif opcao == 4:
+            nome = input("Digite o nome da disciplina a ser excluída: ")
+            sistema.excluir_disciplina(nome)
+        
+        elif opcao == 5:
+            nome_atual = input("Digite o nome atual da disciplina: ")
+            novo_nome = input("Digite o novo nome da disciplina: ")
+            sistema.alterar_nome_disciplina(nome_atual, novo_nome)
+        
+        elif opcao == 6:
             print("Saindo...")
             break
         else:
             print("Opção inválida.")
+    
     except ValueError:
         print("Erro: entrada inválida.")
