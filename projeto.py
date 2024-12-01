@@ -1,16 +1,20 @@
 class Disciplina:
-    def __init__(self, nome, creditos, total_aulas):
+    def __init__(self, nome, total_aulas):
         self.nome = nome
-        self.creditos = creditos
         self.total_aulas = total_aulas
         self.alunos = []  # Agregação: cada Disciplina mantém uma lista de alunos matriculados
 
     def adicionar_aluno(self, aluno):
-        if aluno not in self.alunos:
-            self.alunos.append(aluno)
-            aluno.adicionar_disciplina(self)
-        else:
-            print(f"O aluno {aluno.nome} já está matriculado na disciplina {self.nome}.")
+        for a in self.alunos:
+            if a.matricula == aluno.matricula:
+                print("Já existe um aluno com essa matrícula")
+                return
+            if a.cpf == aluno.cpf:
+                print(f"Aluno de cpf {aluno.cpf} já cadastrado")
+                return
+        self.alunos.append(aluno)
+        aluno.adicionar_disciplina(self)
+        print(f"Aluno {aluno.nome} adicionado à disciplina {self.nome}.")
 
     def listar_alunos(self):
         if not self.alunos:
@@ -39,7 +43,7 @@ class Disciplina:
         return None
 
     def __str__(self):
-        return f"{self.nome} ({self.creditos} créditos, {self.total_aulas} aulas no total)"
+        return f"{self.nome}, {self.total_aulas} aulas no total)"
     
 class Pessoa:
     def __init__(self, nome, cpf):
@@ -51,7 +55,7 @@ class Pessoa:
 
 class Aluno(Pessoa): #herança
     def __init__(self, nome, cpf, matricula):
-        super().__init__(nome, cpf, matricula)
+        super().__init__(nome, cpf)
         self.matricula = matricula
         self.faltas = {}
         self.disciplinas = []
@@ -80,8 +84,8 @@ class SistemaAcademico:
     def __init__(self):
         self.disciplinas = []
 
-    def criar_disciplina(self, nome, creditos, total_aulas):
-        disciplina = Disciplina(nome, creditos, total_aulas)
+    def criar_disciplina(self, nome, total_aulas):
+        disciplina = Disciplina(nome, total_aulas)
         self.disciplinas.append(disciplina)
         print(f"Disciplina {nome} criada com sucesso.")
 
@@ -156,9 +160,8 @@ while True:
         
         if opcao == 1:
             nome = input("Nome da disciplina: ")
-            creditos = int(input("Quantidade de créditos: "))
             total_aulas = int(input("Quantidade total de aulas: "))
-            sistema.criar_disciplina(nome, creditos, total_aulas)
+            sistema.criar_disciplina(nome, total_aulas)
         
         elif opcao == 2:
             sistema.listar_disciplinas()
