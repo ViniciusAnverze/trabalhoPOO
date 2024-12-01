@@ -70,6 +70,53 @@ class SistemaAcademico:
             for i, disc in enumerate(self.disciplinas, 1):
                 print(f"{i}. {disc}")
 
+    def buscar_disciplina(self, nome):
+        for disciplina in self.disciplinas:
+            if disciplina.nome == nome:
+                return disciplina
+        return None
+
+    def excluir_disciplina(self, nome):
+        disciplina_encontrada = None
+        for disciplina in self.disciplinas:
+            if disciplina.nome == nome:
+                disciplina_encontrada = disciplina
+                break
+        
+        if disciplina_encontrada:
+            self.disciplinas.remove(disciplina_encontrada)
+            print(f"Disciplina {disciplina_encontrada.nome} excluída com sucesso.")
+        else:
+            print(f"Disciplina {nome} não encontrada.")
+
+    def alterar_nome_disciplina(self, nome_atual, novo_nome):
+        disciplina = self.buscar_disciplina(nome_atual)
+        if disciplina:
+            disciplina.nome = novo_nome
+            print(f"Nome da disciplina alterado para {novo_nome}.")
+        else:
+            print(f"Disciplina {nome_atual} não encontrada.")
+
+    def porcentagem_presenca(self, disciplina, matricula):
+        for aluno in disciplina.alunos:
+            if aluno.matricula == matricula:
+                faltas = disciplina.faltas_aluno(matricula)
+                if faltas is not None:
+                    return ((disciplina.total_aulas - faltas) / disciplina.total_aulas) * 100
+        print("Aluno não encontrado.")
+        return None
+
+    def aulas_restantes(self, disciplina, matricula):
+        for aluno in disciplina.alunos:
+            if aluno.matricula == matricula:
+                faltas = disciplina.faltas_aluno(matricula)
+                if faltas is not None:
+                    limite_faltas = disciplina.total_aulas * 0.25
+                    restante = limite_faltas - faltas
+                    return max(0, restante)
+        print("Aluno não encontrado.")
+        return None
+
 sistema = SistemaAcademico()
 
 while True:
