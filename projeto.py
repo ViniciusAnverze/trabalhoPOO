@@ -53,7 +53,7 @@ class Pessoa:
     def __str__(self):
         return f"{self.nome} - ({self.cpf})"
 
-class Aluno(Pessoa): #herança
+class Aluno(Pessoa): #Herança: Classe Aluno herdando da classe Pessoa
     def __init__(self, nome, cpf, matricula):
         super().__init__(nome, cpf)
         self.matricula = matricula
@@ -78,7 +78,7 @@ class Aluno(Pessoa): #herança
             print(f"O aluno não está matriculado na disciplina {disciplina_nome}.")
 
     def __str__(self):
-        return f"{self.nome} - ({self.matricula})" #polimorfismo com o método __str__ da classe filho
+        return f"{self.nome} - ({self.matricula})" #Polimorfismo: funcionalidade do método __str__ da classe filho foi alterada
     
 class SistemaAcademico:
     def __init__(self):
