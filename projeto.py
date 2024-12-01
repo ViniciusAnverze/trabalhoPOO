@@ -3,7 +3,7 @@ class Disciplina:
         self.nome = nome
         self.creditos = creditos
         self.total_aulas = total_aulas
-        self.alunos = []
+        self.alunos = []  # Agregação: cada Disciplina mantém uma lista de alunos matriculados
 
     def adicionar_aluno(self, aluno):
         if aluno not in self.alunos:
@@ -11,7 +11,33 @@ class Disciplina:
             aluno.adicionar_disciplina(self)
         else:
             print(f"O aluno {aluno.nome} já está matriculado na disciplina {self.nome}.")
-            
+
+    def listar_alunos(self):
+        if not self.alunos:
+            return f"Não há alunos matriculados na disciplina {self.nome}."
+        return [f"{aluno.nome} ({aluno.matricula})" for aluno in self.alunos]
+
+    def remover_aluno(self, matricula):
+        aluno_encontrado = None
+        for aluno in self.alunos:
+            if aluno.matricula == matricula:
+                aluno_encontrado = aluno
+                break
+        
+        if aluno_encontrado:
+            self.alunos.remove(aluno_encontrado)
+            aluno_encontrado.remover_disciplina(self)
+            print(f"Aluno {aluno_encontrado.nome} removido da disciplina {self.nome}.")
+        else:
+            print(f"Nenhum aluno com matrícula {matricula} encontrado na disciplina {self.nome}.")
+
+    def faltas_aluno(self, matricula):
+        for aluno in self.alunos:
+            if aluno.matricula == matricula:
+                return aluno.faltas.get(self.nome, 0)
+        print("Aluno não encontrado.")
+        return None
+
     def __str__(self):
         return f"{self.nome} ({self.creditos} créditos, {self.total_aulas} aulas no total)"
 
