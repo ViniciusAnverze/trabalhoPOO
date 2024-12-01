@@ -40,19 +40,41 @@ class Disciplina:
 
     def __str__(self):
         return f"{self.nome} ({self.creditos} créditos, {self.total_aulas} aulas no total)"
-
-class Aluno:
-    def __init__(self, nome, matricula):
-        self.nome = nome
-        self.matricula = matricula
-        self.disciplinas = []
     
+class Pessoa:
+    def __init__(self, nome, cpf):
+        self.nome = nome
+        self.cpf = cpf
+    
+    def __str__(self):
+        return f"{self.nome} - ({self.cpf})"
+
+class Aluno(Pessoa): #herança
+    def __init__(self, nome, cpf, matricula):
+        super().__init__(nome, cpf, matricula)
+        self.matricula = matricula
+        self.faltas = {}
+        self.disciplinas = []
+
     def adicionar_disciplina(self, disciplina):
         if disciplina not in self.disciplinas:
             self.disciplinas.append(disciplina)
-    
+            self.faltas[disciplina.nome] = 0
+
+    def remover_disciplina(self, disciplina):
+        if disciplina in self.disciplinas:
+            self.disciplinas.remove(disciplina)
+            if disciplina.nome in self.faltas:
+                del self.faltas[disciplina.nome]
+
+    def registrar_faltas(self, disciplina_nome, quantidade):
+        if disciplina_nome in self.faltas:
+            self.faltas[disciplina_nome] += quantidade
+        else:
+            print(f"O aluno não está matriculado na disciplina {disciplina_nome}.")
+
     def __str__(self):
-        return f"{self.nome} ({self.matricula})"
+        return f"{self.nome} - ({self.matricula})" #polimorfismo com o método __str__ da classe filho
     
 class SistemaAcademico:
     def __init__(self):
