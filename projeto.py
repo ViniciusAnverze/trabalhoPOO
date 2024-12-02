@@ -43,7 +43,7 @@ class Disciplina:
         return None
 
     def __str__(self):
-        return f"{self.nome}, {self.total_aulas} aulas no total)"
+        return f"{self.nome}, {self.total_aulas} aulas no total"
     
 class Pessoa:
     def __init__(self, nome, cpf):
@@ -85,9 +85,14 @@ class SistemaAcademico:
         self.disciplinas = []
 
     def criar_disciplina(self, nome, total_aulas):
+        for disciplina in self.disciplinas:
+            if disciplina.nome == nome:
+                print(f"Já existe uma disciplina com o nome '{nome}'. Não foi possível criar a disciplina.")
+                return
+        
         disciplina = Disciplina(nome, total_aulas)
         self.disciplinas.append(disciplina)
-        print(f"Disciplina {nome} criada com sucesso.")
+        print(f"Disciplina '{nome}' criada com sucesso.")
 
     def listar_disciplinas(self):
         if not self.disciplinas:
